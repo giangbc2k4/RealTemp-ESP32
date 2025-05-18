@@ -25,9 +25,9 @@ This project uses an ESP32 microcontroller connected to a DHT11 temperature and 
 * ESP32 Board Support Installed
 * Libraries:
 
-  * `Firebase ESP Client`
-  * `DHT sensor library`
-  * `WiFi`
+  * `Firebase ESP Client`(https://github.com/mobizt/Firebase-ESP-Client)
+  * `DHT sensor library`(https://github.com/adafruit/DHT-sensor-library)
+  * `WiFi`(https://github.com/espressif/arduino-esp32)
 
 ---
 
@@ -52,6 +52,7 @@ This project uses an ESP32 microcontroller connected to a DHT11 temperature and 
 * Create a Firebase project at [Firebase Console](https://console.firebase.google.com/).
 * Enable **Realtime Database** and set proper rules for read/write.
 * Get your project API key and Realtime Database URL.
+* Enable Email/Password authentication
 
 ### 2. Configure Code
 
