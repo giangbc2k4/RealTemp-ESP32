@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Theo dõi nhiệt độ",
-    "slug": "Theo dõi nhiệt độ",
+    "slug": "dht11-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
