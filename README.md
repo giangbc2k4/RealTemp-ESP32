@@ -25,7 +25,7 @@ This project uses an ESP32 microcontroller connected to a DHT11 temperature and 
 * ESP32 Board Support Installed
 * Libraries:
 
-  * `Firebase ESP Client`(https://github.com/mobizt/Firebase-ESP-Client)
+  * `Firebase ESP Client`[https://github.com/mobizt/Firebase-ESP-Client](https://github.com/mobizt/Firebase-ESP-Client)
   * `DHT sensor library`(https://github.com/adafruit/DHT-sensor-library)
   * `WiFi`(https://github.com/espressif/arduino-esp32)
 
