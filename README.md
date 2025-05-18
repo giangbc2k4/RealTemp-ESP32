@@ -1,6 +1,3 @@
-Dưới đây là bản **README** trình bày chuyên nghiệp, rõ ràng, dễ đọc, phù hợp cho project ESP32 kết hợp Firebase và DHT11, giúp người khác nhanh chóng hiểu và làm theo:
-
----
 
 # ESP32 Real-Time Temperature Monitoring & Multi-Light Control with Firebase
 
@@ -41,7 +38,7 @@ This project uses an ESP32 microcontroller connected to a DHT11 temperature and 
 | GPIO4     | DHT11 Data | Data pin from sensor |
 | GPIO2     | LED1       | LED 1                |
 | GPIO15    | LED2       | LED 2                |
-| GPIO13    | LED3       | LED 3                |
+| GPIO5    | LED3       | LED 3                |
 | GND       | All GND    | Common Ground        |
 
 *Adjust GPIO pins in code if your wiring differs.*
