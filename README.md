@@ -126,13 +126,24 @@ Set your WiFi credentials:
 
 ---
 
-## React Native App Setup
 
-You can download the React Native app source code here. (https://github.com/giangbc2k4/RealTemp-ESP32.git)
 
-After cloning, replace the file firebase.ts with your own configuration (API key, DB URL, email, password).
+# React Native App Setup (Simple Steps)
 
-Run the app normally.
+## 1. Clone project
+
+```bash
+git clone https://github.com/giangbc2k4/RealTemp-ESP32.git
+cd RealTemp-ESP32
+```
+## 2. Install libraries 
+
+```bash
+npm install
+
+```
+## 3. Update Firebase config
+
 
 ```tsx
 import { initializeApp } from "firebase/app";
@@ -154,6 +165,27 @@ const db = getDatabase(app);
 export { db };
 
 ```
+## 4. Run app
+Start Expo server:
+
+```bash
+npm start
+```
+Run on Android:
+```bash
+npm run android
+```
+Run on iOS:
+```bash
+npm run ios
+```
+Or scan QR code with Expo Go app on your phone.
+## Notes
+Firebase Realtime Database rules must allow access.
+
+Email/Password authentication must be enabled in Firebase.
+
+Your device and ESP32 should use same WiFi network.
 
 ---
 
