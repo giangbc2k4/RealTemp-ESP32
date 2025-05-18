@@ -1,9 +1,10 @@
+---
 
 # ESP32 Real-Time Temperature Monitoring & Multi-Light Control with Firebase
 
 ## Overview
 
-This project uses an ESP32 microcontroller connected to a DHT11 temperature and humidity sensor, combined with Firebase Realtime Database for real-time monitoring and control of multiple LEDs. You can remotely monitor temperature data and control LEDs through Firebase or a connected app.
+This project uses an ESP32 microcontroller with a DHT11 sensor for temperature and humidity measurement, integrated with Firebase Realtime Database to enable remote real-time monitoring and multi-LED control. You can control LEDs and monitor sensor data remotely via Firebase or a connected React Native app.
 
 ---
 
@@ -21,13 +22,13 @@ This project uses an ESP32 microcontroller connected to a DHT11 temperature and 
 
 ## Software Requirements
 
-* Arduino IDE (or PlatformIO)
+* Arduino IDE or PlatformIO
 * ESP32 Board Support Installed
 * Libraries:
 
-  * `Firebase ESP Client`[https://github.com/mobizt/Firebase-ESP-Client](https://github.com/mobizt/Firebase-ESP-Client)
-  * `DHT sensor library`(https://github.com/adafruit/DHT-sensor-library)
-  * `WiFi`(https://github.com/espressif/arduino-esp32)
+  * [Firebase ESP Client](https://github.com/mobizt/Firebase-ESP-Client)
+  * [DHT sensor library](https://github.com/adafruit/DHT-sensor-library)
+  * [WiFi library for ESP32](https://github.com/espressif/arduino-esp32)
 
 ---
 
@@ -38,7 +39,7 @@ This project uses an ESP32 microcontroller connected to a DHT11 temperature and 
 | GPIO4     | DHT11 Data | Data pin from sensor |
 | GPIO2     | LED1       | LED 1                |
 | GPIO15    | LED2       | LED 2                |
-| GPIO5    | LED3       | LED 3                |
+| GPIO5     | LED3       | LED 3                |
 | GND       | All GND    | Common Ground        |
 
 *Adjust GPIO pins in code if your wiring differs.*
@@ -47,39 +48,61 @@ This project uses an ESP32 microcontroller connected to a DHT11 temperature and 
 
 ## Setup Instructions
 
-### 1. Prepare Firebase
+### 1. Firebase Setup
 
 * Create a Firebase project at [Firebase Console](https://console.firebase.google.com/).
-* Enable **Realtime Database** and set proper rules for read/write.
-* Get your project API key and Realtime Database URL.
-* Enable Email/Password authentication
+* Enable **Realtime Database** and configure rules (example rules for testing below):
 
-### 2. Configure Code
+```json
+{
+  "rules": {
+    ".read": true,
+    ".write": true
+  }
+}
+```
 
-* Replace WiFi SSID and Password with your network credentials.
-* Insert Firebase API key and Database URL in the code constants.
-* Adjust GPIO pins if needed.
+* Enable Email/Password authentication in Authentication tab.
+* Obtain your Firebase project **API key** and **Realtime Database URL**.
 
-### 3. Upload Code
+### 2. Configure Your ESP32 Code
 
-* Open the project in Arduino IDE or PlatformIO.
-* Install all required libraries.
+Update these defines in your code:
+
+```c
+#define API_KEY "YOUR_FIREBASE_API_KEY"
+#define DATABASE_URL "https://your-project-id.firebaseio.com/"
+#define USER_EMAIL "your-email@example.com"
+#define USER_PASSWORD "your-secure-password"
+```
+
+Set your WiFi credentials:
+
+```c
+#define WIFI_SSID "your_wifi_ssid"
+#define WIFI_PASSWORD "your_wifi_password"
+```
+
+### 3. Upload Firmware
+
+* Open your project in Arduino IDE or PlatformIO.
+* Install required libraries if not already done.
 * Upload the firmware to ESP32.
-* Open Serial Monitor to verify WiFi and Firebase connections.
+* Open Serial Monitor to check WiFi and Firebase connection status.
 
 ---
 
 ## Functional Description
 
-* **Temperature & Humidity Reading:** ESP32 reads data from DHT11 periodically.
-* **Firebase Sync:** Sensor data and LED control commands are synced with Firebase Realtime Database.
+* **Sensor Reading:** Periodic temperature and humidity readings from DHT11.
+* **Firebase Sync:** Sensor data and LED control flags synced in Realtime Database.
 * **LED Control Logic:**
 
-  * When `all = false`: All LEDs are forced OFF regardless of other flags.
-  * When `all = true`:
+  * If `all = false`: All LEDs are turned OFF.
+  * If `all = true`:
 
-    * LEDs 1 and 2 follow temperature-based automatic control *only if* at least one of `led1` or `led2` flags in Firebase is `true`. Otherwise, they remain OFF.
-    * LED 3 state follows the `led3` flag in Firebase directly.
+    * LEDs 1 and 2 turn ON/OFF based on temperature if at least one of `led1` or `led2` is `true` in Firebase; otherwise OFF.
+    * LED 3 state directly follows the `led3` flag from Firebase.
 
 ---
 
@@ -91,40 +114,60 @@ This project uses an ESP32 microcontroller connected to a DHT11 temperature and 
     "control": {
       "all": true,
       "led1": true,
-      "led2": false,
+      "led2": true,
       "led3": true
     },
-    "sensor": {
-      "temperature": 27.5,
-      "humidity": 60
-    }
+    "humidity": 20,
+    "temperature": 10
   }
 }
 ```
 
 ---
 
-## Usage Notes
+## React Native App Setup
 
-* Ensure ESP32 has stable WiFi connection to sync data correctly.
-* Use Firebase Console or your custom app to toggle `all`, `led1`, `led2`, and `led3` to control the LEDs.
-* Temperature-based LED logic runs automatically when conditions above are met.
+You can download the React Native app source code here. (https://github.com/giangbc2k4/RealTemp-ESP32.git)
+
+After cloning, replace the file firebase.ts with your own configuration (API key, DB URL, email, password).
+
+Run the app normally.
+
+```tsx
+import { initializeApp } from "firebase/app";
+import { getDatabase } from "firebase/database";
+
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY_HERE",
+  authDomain: "YOUR_AUTH_DOMAIN_HERE",
+  databaseURL: "YOUR_DATABASE_URL_HERE",
+  projectId: "YOUR_PROJECT_ID_HERE",
+  storageBucket: "YOUR_STORAGE_BUCKET_HERE",
+  messagingSenderId: "YOUR_MESSAGING_SENDER_ID_HERE",
+  appId: "YOUR_APP_ID_HERE",
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+export { db };
+
+```
 
 ---
 
 ## Troubleshooting
 
-* **ESP32 can’t connect to WiFi:** Check SSID/Password and signal strength.
-* **Firebase connection issues:** Verify API key, database URL, and database rules.
-* **LEDs not responding:** Double-check wiring and GPIO pin assignment.
-* **Data not updating:** Ensure ESP32 has internet access and no firewall blocking Firebase.
+* Check WiFi credentials if ESP32 can't connect.
+* Verify Firebase API key and database URL.
+* Ensure Firebase Realtime Database rules allow authenticated read/write.
+* Double-check wiring for LEDs and sensors.
+* Use Serial Monitor to track errors.
 
 ---
 
 ## License
 
-This project is open source and free to use under the MIT License.
+MIT License — Free to use and modify.
 
 ---
-
-Nếu bạn muốn, tôi có thể giúp bạn viết thêm phần hướng dẫn cấu hình Firebase hoặc mẫu app điều khiển trên React Native nhé.
