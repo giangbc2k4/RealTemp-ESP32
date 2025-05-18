@@ -25,7 +25,6 @@
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
-
       "expo-router",
       [
         "expo-splash-screen",
@@ -45,6 +44,12 @@
       "eas": {
         "projectId": "75b7d7ea-65b8-43d1-a1df-827a59b7a1d9"
       }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/75b7d7ea-65b8-43d1-a1df-827a59b7a1d9"
     }
   }
 }
