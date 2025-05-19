@@ -6,12 +6,10 @@
 
 This project uses an ESP32 microcontroller with a DHT11 sensor for temperature and humidity measurement, integrated with Firebase Realtime Database to enable remote real-time monitoring and multi-LED control. You can control LEDs and monitor sensor data remotely via Firebase or a connected React Native app.
 👉 Demo app [React Native demo app]( https://drive.google.com/file/d/1YZ6uRNtUzphLIVL4PBOrauZwbSCO0E0m/view?usp=sharing[https://drive.google.com/file/d/1YZ6uRNtUzphLIVL4PBOrauZwbSCO0E0m/view?usp=sharing](https://drive.google.com/file/d/1YZ6uRNtUzphLIVL4PBOrauZwbSCO0E0m/view?usp=sharing))  you can download and try it out.
+
 ## Demo Video
 
-Watch on YouTube Shorts: [https://youtube.com/shorts/QtZKbv8-ils](https://youtube.com/shorts/QtZKbv8-ils)
-
-Or click the thumbnail below:  
-[![YouTube Short](https://img.youtube.com/vi/QtZKbv8-ils/hqdefault.jpg)](https://youtube.com/shorts/QtZKbv8-ils)
+[![Watch the demo](https://img.youtube.com/vi/XzEVSjrkoaY/0.jpg)](https://youtu.be/XzEVSjrkoaY)
 
 ---
 
