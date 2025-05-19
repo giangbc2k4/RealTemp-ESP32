@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import CircleStatus from "./CircleStatus";
 import { getComfortLevel, getColorByTemperature } from "@/utils/getComfortLevel";
@@ -13,16 +13,24 @@ const DateCircleRow = ({ temperature, humidity, dateString }: Props) => {
   const comfortText = getComfortLevel(temperature, humidity);
   const circleColor = getColorByTemperature(temperature);
 
-  const displayDate = dateString || new Date().toLocaleString();
+  const [currentDate, setCurrentDate] = useState(new Date());
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentDate(new Date());
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const displayDate = dateString || currentDate.toLocaleString();
 
   return (
     <View style={styles.row}>
       <View style={styles.dateBox}>
         <Text style={styles.dateText}>{displayDate}</Text>
-  
       </View>
-<CircleStatus status={comfortText} circleColor={circleColor} />
-
+      <CircleStatus status={comfortText} circleColor={circleColor} />
     </View>
   );
 };
