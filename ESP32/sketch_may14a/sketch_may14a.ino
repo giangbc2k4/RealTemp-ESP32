@@ -3,7 +3,7 @@
 #include <DHT.h>
 
 // WiFi
-#define WIFI_SSID "Giang Tran"
+#define WIFI_SSID "Giang"
 #define WIFI_PASSWORD "21012004"
 
 // Firebase
