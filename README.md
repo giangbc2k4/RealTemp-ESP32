@@ -1,210 +1,85 @@
----
+# RealTemp-ESP32
 
-# ESP32 Real-Time Temperature Monitoring & Multi-Light Control with Firebase
+ESP32 real-time temperature, humidity, and multi-light control project. The ESP32 reads a DHT11 sensor, syncs data with Firebase Realtime Database, and can be controlled from a React Native/Expo mobile app.
 
-## Overview
+## Features
 
-This project uses an ESP32 microcontroller with a DHT11 sensor for temperature and humidity measurement, integrated with Firebase Realtime Database to enable remote real-time monitoring and multi-LED control. You can control LEDs and monitor sensor data remotely via Firebase or a connected React Native app.
-👉 Demo app [React Native demo app]( https://drive.google.com/file/d/1YZ6uRNtUzphLIVL4PBOrauZwbSCO0E0m/view?usp=sharing[https://drive.google.com/file/d/1YZ6uRNtUzphLIVL4PBOrauZwbSCO0E0m/view?usp=sharing](https://drive.google.com/file/d/1YZ6uRNtUzphLIVL4PBOrauZwbSCO0E0m/view?usp=sharing))  you can download and try it out.
+- ESP32 reads temperature and humidity from DHT11.
+- Realtime Firebase data sync.
+- Multi-light control from Firebase/mobile app.
+- Expo mobile app for monitoring and control.
+- Demo video and hardware setup documentation.
 
-## Demo Video
+## Tech Stack
 
-[![Watch the demo](https://img.youtube.com/vi/XzEVSjrkoaY/0.jpg)](https://youtu.be/XzEVSjrkoaY)
-
----
+- ESP32
+- Arduino IDE or PlatformIO
+- DHT11 sensor
+- Firebase Realtime Database
+- Expo
+- React Native
+- TypeScript
 
 ## Hardware Requirements
 
-| Component             | Quantity  | Notes                         |
-| --------------------- | --------- | ----------------------------- |
-| ESP32 Dev Board       | 1         | Any ESP32 development board   |
-| DHT11 Sensor          | 1         | Temperature & humidity sensor |
-| LEDs                  | 3         | Connected to GPIO pins        |
-| Jumper Wires          | As needed | For wiring components         |
-| Breadboard (optional) | 1         | For easy wiring               |
+| Component | Quantity | Notes |
+| --- | ---: | --- |
+| ESP32 Dev Board | 1 | Any common ESP32 development board |
+| DHT11 Sensor | 1 | Temperature and humidity sensor |
+| LEDs | 3 | Connected to GPIO pins |
+| Jumper wires | As needed | For wiring |
+| Breadboard | 1 | Optional |
 
----
+## Wiring
 
-## Software Requirements
+| ESP32 Pin | Component |
+| --- | --- |
+| GPIO4 | DHT11 data |
+| GPIO2 | LED 1 |
+| GPIO15 | LED 2 |
+| GPIO5 | LED 3 |
+| GND | Common ground |
 
-* Arduino IDE or PlatformIO
-* ESP32 Board Support Installed
-* Libraries:
+Adjust GPIO pins in the sketch if your wiring is different.
 
-  * [Firebase ESP Client](https://github.com/mobizt/Firebase-ESP-Client)
-  * [DHT sensor library](https://github.com/adafruit/DHT-sensor-library)
-  * [WiFi library for ESP32](https://github.com/espressif/arduino-esp32)
+## Project Structure
 
----
-
-## Wiring Diagram
-
-| ESP32 Pin | Component  | Description          |
-| --------- | ---------- | -------------------- |
-| GPIO4     | DHT11 Data | Data pin from sensor |
-| GPIO2     | LED1       | LED 1                |
-| GPIO15    | LED2       | LED 2                |
-| GPIO5     | LED3       | LED 3                |
-| GND       | All GND    | Common Ground        |
-
-*Adjust GPIO pins in code if your wiring differs.*
-
----
-
-## Setup Instructions
-
-### 1. Firebase Setup
-
-* Create a Firebase project at [Firebase Console](https://console.firebase.google.com/).
-* Enable **Realtime Database** and configure rules (example rules for testing below):
-
-```json
-{
-  "rules": {
-    ".read": true,
-    ".write": true
-  }
-}
+```text
+ESP32/sketch_may14a/       Arduino sketch for ESP32
+App/dht11-app/             Expo mobile app
 ```
 
-* Enable Email/Password authentication in Authentication tab.
-* Obtain your Firebase project **API key** and **Realtime Database URL**.
+## Firmware Setup
 
-### 2. Configure Your ESP32 Code
+1. Install ESP32 board support in Arduino IDE or PlatformIO.
+2. Install required libraries:
+   - Firebase ESP Client
+   - DHT sensor library
+   - WiFi library for ESP32
+3. Configure Wi-Fi and Firebase credentials in the sketch.
+4. Upload the sketch to the ESP32.
 
-Update these defines in your code:
-
-```c
-#define API_KEY "YOUR_FIREBASE_API_KEY"
-#define DATABASE_URL "https://your-project-id.firebaseio.com/"
-#define USER_EMAIL "your-email@example.com"
-#define USER_PASSWORD "your-secure-password"
-```
-
-Set your WiFi credentials:
-
-```c
-#define WIFI_SSID "your_wifi_ssid"
-#define WIFI_PASSWORD "your_wifi_password"
-```
-
-### 3. Upload Firmware
-
-* Open your project in Arduino IDE or PlatformIO.
-* Install required libraries if not already done.
-* Upload the firmware to ESP32.
-* Open Serial Monitor to check WiFi and Firebase connection status.
-
----
-
-## Functional Description
-
-* **Sensor Reading:** Periodic temperature and humidity readings from DHT11.
-* **Firebase Sync:** Sensor data and LED control flags synced in Realtime Database.
-* **LED Control Logic:**
-
-  * If `all = false`: All LEDs are turned OFF.
-  * If `all = true`:
-
-    * LEDs 1 and 2 turn ON/OFF based on temperature if at least one of `led1` or `led2` is `true` in Firebase; otherwise OFF.
-    * LED 3 state directly follows the `led3` flag from Firebase.
-
----
-
-## Firebase Data Structure Example
-
-```json
-{
-  "esp32": {
-    "control": {
-      "all": true,
-      "led1": true,
-      "led2": true,
-      "led3": true
-    },
-    "humidity": 20,
-    "temperature": 10
-  }
-}
-```
-
----
-
-
-
-# React Native App Setup (Simple Steps)
-
-## 1. Clone project
+## Mobile App Setup
 
 ```bash
-git clone https://github.com/giangbc2k4/RealTemp-ESP32.git
-cd RealTemp-ESP32
-```
-## 2. Install libraries 
-
-```bash
+cd App/dht11-app
 npm install
-
-```
-## 3. Update Firebase config
-
-
-```tsx
-import { initializeApp } from "firebase/app";
-import { getDatabase } from "firebase/database";
-
-const firebaseConfig = {
-  apiKey: "YOUR_API_KEY_HERE",
-  authDomain: "YOUR_AUTH_DOMAIN_HERE",
-  databaseURL: "YOUR_DATABASE_URL_HERE",
-  projectId: "YOUR_PROJECT_ID_HERE",
-  storageBucket: "YOUR_STORAGE_BUCKET_HERE",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID_HERE",
-  appId: "YOUR_APP_ID_HERE",
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
-
-export { db };
-
-```
-## 4. Run app
-Start Expo server:
-
-```bash
 npm start
 ```
-Run on Android:
+
+Run on a target platform:
+
 ```bash
 npm run android
-```
-Run on iOS:
-```bash
 npm run ios
+npm run web
 ```
-Or scan QR code with Expo Go app on your phone.
-## Notes
-Firebase Realtime Database rules must allow access.
 
-Email/Password authentication must be enabled in Firebase.
+## Demo
 
-Your device and ESP32 should use same WiFi network.
+- Demo video: https://youtu.be/XzEVSjrkoaY
+- Demo app download: https://drive.google.com/file/d/1YZ6uRNtUzphLIVL4PBOrauZwbSCO0E0m/view
 
----
+## Security Note
 
-## Troubleshooting
-
-* Check WiFi credentials if ESP32 can't connect.
-* Verify Firebase API key and database URL.
-* Ensure Firebase Realtime Database rules allow authenticated read/write.
-* Double-check wiring for LEDs and sensors.
-* Use Serial Monitor to track errors.
-
----
-
-## License
-
-MIT License — Free to use and modify.
-
----
+Do not use open Firebase rules in production. Use authenticated access and restrict read/write permissions before deploying outside a test environment.
