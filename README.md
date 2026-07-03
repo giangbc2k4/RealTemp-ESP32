@@ -83,3 +83,23 @@ npm run web
 ## Security Note
 
 Do not use open Firebase rules in production. Use authenticated access and restrict read/write permissions before deploying outside a test environment.
+
+## Architecture and data flow
+
+The ESP32 reads the DHT11 and publishes sensor values to Firebase Realtime Database. The Expo app subscribes to those values and writes three light states; the ESP32 receives the state changes and updates its GPIO outputs. Firmware and app must use the same database paths and data types.
+
+## Firebase setup
+
+Create a Firebase project and Realtime Database, then update both the Arduino sketch and `App/dht11-app/constants/firebase.ts`. Use Authentication and restrictive database rules; the client UI is not an authorization boundary. Store sensor timestamps so the app can clearly show stale/offline data.
+
+## Hardware validation
+
+DHT11 should not be polled too frequently. Confirm the GPIO choices do not conflict with ESP32 boot strapping. Real loads require a relay/transistor, flyback protection and suitable power supply—never drive a mains device directly from GPIO. Define a safe output state for lost Wi-Fi, Firebase errors and reboot.
+
+## Reliability checklist
+
+- Add reconnect backoff, timeout, watchdog and useful serial logs.
+- Validate Firebase values before writing GPIO.
+- Test each light, simultaneous commands and sensor disconnect.
+- Calibrate against a reference meter.
+- Add signed OTA and device identity before production.
